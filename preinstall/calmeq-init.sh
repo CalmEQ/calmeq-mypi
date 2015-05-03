@@ -15,4 +15,4 @@ else
 fi
 
 # run first time
-. $MYDIR/firsttime.sh 
+. $MYDIR/mypi-init.sh
