@@ -1,0 +1,7 @@
+## Modifications needed for a fresh NOOBS to be ready to go
+
+# How to modify noobs
+http://www.i-programmer.info/programming/hardware/7688-real-raspberry-pi-custom-noobs.html?start=1
+
+1. Place calmeq-init.sh init.d and ensure its executable
+2. create a symlink from /etc/rc2.d/ 
