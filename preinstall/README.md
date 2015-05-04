@@ -6,7 +6,8 @@ http://www.i-programmer.info/programming/hardware/7688-real-raspberry-pi-custom-
 ### our modifications for noobs
 1. Place calmeq-init.sh /etc/init.d and ensure its executable
 2. create a symlink from /etc/rc2.d/S10calmeq-init to /etc/init.d/calmeq-init.sh
-3. modify the /home/pi/.profile to source the /opt/calmeq-mypi/.profile
+3. add the calmeq device id to /etc/calmeq-device-id *This is device specific*
+4. modify the /home/pi/.profile to source the /opt/calmeq-mypi/.profile
 
 ```bash
 # source calmeq profile 
