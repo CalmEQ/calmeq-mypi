@@ -1,6 +1,11 @@
 #!/bin/bash
 
 # Script to update the website
+
+# set environment
+. /opt/calmeq-mypi/env.sh
+
+# set variables
 PYDIR=/opt/calmeq-mypi/python
 MAC=$( cat /sys/class/net/eth0/address )
 DELAY=60
