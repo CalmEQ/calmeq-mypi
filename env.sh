@@ -4,7 +4,7 @@
 # rather just make sure the master scripts can be found, and any global environment variables are set
 
 # add the bin path
-BIN=/opt/calmeq-devices/bin
+BIN=/opt/calmeq-mypi/bin
 export PATH="$BIN:$PATH"
 
 # more stuff?
