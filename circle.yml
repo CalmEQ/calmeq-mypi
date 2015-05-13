@@ -1,0 +1,3 @@
+test:
+  override:
+    - bash test/bin/quicktest.sh # use our custom test scriptx
