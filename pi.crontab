@@ -22,4 +22,4 @@
 # m h  dom mon dow   command
 ### */10 * * * * recordnow.sh 580 >> /home/pi/log/recordlog 2>&1
 * * * * * timeout 55 gpxlogger -m 1 >> /home/pi/gpstrack.xml
-/5 * * * * timeout 55 sh /opt/calmeq-mypi/bin/pushlive.sh
+*/5 * * * * timeout 55 sh /opt/calmeq-mypi/bin/pushlive.sh
