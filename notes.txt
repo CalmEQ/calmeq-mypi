@@ -1,0 +1,16 @@
+
+## todo list
+
+1. Simplify the wifi setup
+2. Store 36 hours worth of audio
+3. Asyncrenous push of processed data
+
+
+lets try spinning up a webserver, and putting a php form up to list and then
+add wifi info to server. The web server can also list current recordings, 
+and other status updates
+
+alternatively we power everything off the devices page, but i think that would
+be a bit awkward, and not leave open the backdoors that we want to configure 
+the devices
+
