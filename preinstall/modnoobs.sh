@@ -22,15 +22,26 @@ else
     echo "Copying init"
     /bin/cp calmeq-init.sh $ROOTDIR/etc/init.d
     /bin/chmod a+x $ROOTDIR/etc/init.d/calmeq-init.sh
+#    update-rc.d calmeq-init.sh defaults
 fi
 
 #2. create a symlink from /etc/rc2.d/S10calmeq-init to /etc/init.d/calmeq-init.sh
-if [ -f $ROOTDIR/etc/rc2.d/S10calmeq-init ]; then
-    echo "Link already exists"
-else
-    echo "Linking to run time environment"
-    /bin/ln -s $ROOTDIR/etc/init.d/calmeq-init.sh $ROOTDIR/etc/rc2.d/S10calmeq-init
-fi
+NLINK=S03calmeq-init.sh
+NBASE=$ROOTDIR/etc
+SOURCE=$ROOTDIR/etc/init.d/calmeq-init.sh
+function checkcreate {
+    if [ -f $2 ]; then
+        echo "Link already exists"
+    else
+        echo "Linking to run time environment"
+        /bin/ln -s $1 $2
+    fi
+}
+checkcreate $SOURCE $NBASE/rc2.d/$NLINK
+checkcreate $SOURCE $NBASE/rc3.d/$NLINK
+checkcreate $SOURCE $NBASE/rc4.d/$NLINK
+checkcreate $SOURCE $NBASE/rc5.d/$NLINK
+
 
 
 #3. add the calmeq device id to /etc/calmeq-device-id *This is device specific*
