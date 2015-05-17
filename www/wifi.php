@@ -13,7 +13,17 @@ for development we're going to fake some of the
         <title>Wifi Configuration</title>
     </head>
     
-    
+    <body>
+        <h1>Wifi Configuration</h1>
+        <h2>Current Status: </h2>
+        <?php system('ifconfig wlan0'); echo "stuff"; ?>
+        <h2>Saved Networks</h2>
+        <table>
+            <tr>
+                <td>SSID</td><td>Passcode</td>
+            </tr>
+        </table>
+    </body>
     
     
     

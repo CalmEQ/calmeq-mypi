@@ -4,5 +4,5 @@
 1. apache2
 2. python?
 3. lame?
-4. 
+4. sudo apt-get install php5 libapache2-mod-php5 -y
 
