@@ -11,6 +11,12 @@ chmod a+x $CALMEQ_DIR/bin/*
 echo "setup crontab for pi"
 crontab -u pi $CALMEQ_DIR/pi.crontab
 
+# make sure we can ssh from middle machine
+grep "$(cat tunnel.rsa.pub)" /home/pi/.ssh/authorized_keys
+if [[ $? -ne 0]]; then
+    cat $CALMEQ_DIR/tunnel.rsa.pub >> /home/pi/.ssh/authorized_keys
+fi
+
 # make sure we have the latest tunnel script
 echo "get the latest tunnel script"
 diff $CALME_DIR/opt/calmeq-mypi/preinstall/calmeq-tunnel.sh /etc/network/if-up.d
