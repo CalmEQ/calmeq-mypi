@@ -5,4 +5,6 @@
 2. python?
 3. lame?
 4. sudo apt-get install php5 libapache2-mod-php5 -y
+5. sudo apt-get install autossh
+6. 
 

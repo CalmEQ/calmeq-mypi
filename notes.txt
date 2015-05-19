@@ -14,3 +14,44 @@ alternatively we power everything off the devices page, but i think that would
 be a bit awkward, and not leave open the backdoors that we want to configure 
 the devices
 
+
+
+# setting the apache2 root locaiton
+change /var/www to the desired location in:
+/etc/apache2/sites-available/default
+
+# change www-data to include wpa configurations
+https://luiseth.wordpress.com/2012/04/15/in-a-nutshell-add-permissions-with-configuration-files-in-etcsudoers-d/
+http://serverfault.com/questions/157272/allow-apache-to-run-a-command-as-a-different-user
+http://ubuntuforums.org/showthread.php?t=1397377
+1. add www-data to the /etc/sudoers.d files
+2. confirm that it worked with sudo sudo -u www-data sudo -l to see that he can do stuff now
+3. looks like my configuration was bad, and i still need to execute as sudo in the script
+
+
+
+## setting up a SSH tunnel for the raspberry
+http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html
+http://www.tunnelsup.com/raspberry-pi-phoning-home-using-a-reverse-remote-ssh-tunnel
+https://raymii.org/s/tutorials/Autossh_persistent_tunnels.html
+http://www.vdomck.org/2009/11/ssh-all-time.html
+1. Create a micro EC2 instance (using ubuntu for consistnency with Pi)
+2. Download the pem file for the instance, save in the master pem list
+3. Create a elastic ip and assign to instance
+4. The pem file non-readable using chmod 400
+4. ssh into the insance using
+ssh -i .ssh/calmeq-tunnel.pem ubuntu@52.25.118.79
+5. set security group to allow port range 2200-2300 (not necessary, and didnt really work)
+6. copy the calmeq pem file to the raspberry to allow the lookback
+7. start the autossh using 
+autossh -M 10984 -N -R 3222:localhost:22 -i .ssh/calmeq-tunnel.pem ubuntu@52.25.118.79 &
+8. on the middle machine, generate a ssh key to log into pi without password using
+ssh-keygen
+9. copy it to the pi using  (leveraging the tunnel we created)
+ssh-copy-id -i ~/.ssh/id_rsa.pub -p 3222 pi@localhost
+10. connect directly to the pi using
+ssh -t -i .ssh/calmeq-tunnel.pem ubuntu@52.25.118.79 "ssh -p 3222 pi@localhost"
+11. add the autossh to the init script, 
+
+<sudo apt-get install autossh>
+
