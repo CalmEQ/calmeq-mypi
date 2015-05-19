@@ -11,6 +11,17 @@ chmod a+x $CALMEQ_DIR/bin/*
 echo "setup crontab for pi"
 crontab -u pi $CALMEQ_DIR/pi.crontab
 
+# make sure we have the latest tunnel script
+echo "get the latest tunnel script"
+diff $CALME_DIR/opt/calmeq-mypi/preinstall/calmeq-tunnel.sh /etc/network/if-up.d
+if [[ $? -ne 0 ]]; then 
+    /bin/cp $CALME_DIR/opt/calmeq-mypi/preinstall/calmeq-tunnel.sh /etc/network/if-up.d/
+fi
+/bin/pidof autossh
+if [[ $? -ne 0 ]]; then 
+    /etc/network/if-up.d/calmeq-tunnel.sh &
+fi
+
 # done!
 echo "Setup Complete"
 

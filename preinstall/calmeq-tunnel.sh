@@ -26,5 +26,5 @@ AUTOSSH_GATETIME=0
 
 export AUTOSSH_PORT AUTOSSH_GATETIME
 
-
-echo su -c "autossh -f -N -R $MYPORT:localhost:22 -i $IDFILE ${MIDDLEUSER}@$MIDDLEIP" $LOCALUSER &
+# run it!
+su -c "autossh -f -N -R $MYPORT:localhost:22 -i $IDFILE ${MIDDLEUSER}@$MIDDLEIP" $LOCALUSER &

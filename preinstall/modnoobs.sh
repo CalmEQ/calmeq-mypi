@@ -52,6 +52,9 @@ else
     echo "No device id set"
 fi
 
+#4. make sure the ssh tunnel will launch
+/bin/cp ./calmeq-tunnel.sh $ROOTDIR/etc/network/if-up.d/
+
 # dont modify profile because we'll source everything we need from crontab
 #
 # #4. modify the /home/pi/.profile to source the /opt/calmeq-mypi/.profile
