@@ -12,7 +12,7 @@ echo "setup crontab for pi"
 crontab -u pi $CALMEQ_DIR/pi.crontab
 
 # make sure we can ssh from middle machine
-grep "$(cat tunnel.rsa.pub)" /home/pi/.ssh/authorized_keys
+grep "$(cat tunnel.rsa.pub)" /home/pi/.ssh/authorized_keys > /dev/null
 if [[ $? -ne 0 ]]; then
     cat $CALMEQ_DIR/tunnel.rsa.pub >> /home/pi/.ssh/authorized_keys
 fi
