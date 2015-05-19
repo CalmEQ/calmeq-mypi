@@ -9,22 +9,25 @@ for development we're going to fake some of the
 -->
 
 <html>
-    <head>
-        <title>Wifi Configuration</title>
-    </head>
-    
-    <body>
-        <h1>Wifi Configuration</h1>
-        <h2>Current Status: </h2>
-        <?php system('ifconfig wlan0'); echo "stuff"; ?>
-        <h2>Saved Networks</h2>
-        <table>
-            <tr>
-                <td>SSID</td><td>Passcode</td>
-            </tr>
-        </table>
-    </body>
-    
-    
-    
+  <head>
+    <title>Wifi Configuration</title>
+  </head>
+  
+  <body>
+    <h1>Wifi Configuration</h1>
+    <p>This page allows you to see and set the wifi configuration for the raspberry pi</p>
+    <h2>Current Status: </h2>
+    <pre><?php exec('/sbin/ifconfig wlan0', $ipinfo); echo implode("<br>", $ipinfo) ?></pre>
+    <h2>Saved Networks</h2>
+    <table>
+      <tr>
+        <td>SSID</td><td>Passcode</td><td>KeyMgmt</td>
+      </tr>
+    </table>
+    <pre><?php system('whoami'); ?></pre>
+    <pre><?php exec('/home/pi/calmeq-mypi/bin/listnetworks.sh', $list); echo implode("<br>", $list) ?></pre>
+  </body>
+  
+  
+  
 </html>
