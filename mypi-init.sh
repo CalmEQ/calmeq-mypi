@@ -12,7 +12,7 @@ echo "setup crontab for pi"
 crontab -u pi $CALMEQ_DIR/pi.crontab
 
 # make sure we can ssh from middle machine
-grep "$(cat tunnel.rsa.pub)" /home/pi/.ssh/authorized_keys > /dev/null
+grep "$(cat $CALMEQ_DIR/tunnel.rsa.pub)" /home/pi/.ssh/authorized_keys > /dev/null
 if [[ $? -ne 0 ]]; then
     cat $CALMEQ_DIR/tunnel.rsa.pub >> /home/pi/.ssh/authorized_keys
 fi
@@ -27,6 +27,11 @@ fi
 if [[ $? -ne 0 ]]; then 
     /etc/network/if-up.d/calmeq-tunnel.sh &
 fi
+
+# copy over the pem file for the middle machine
+# do this manually once
+# scp calmeq-tunnel.pem.txt pi@mypi.local:~/.ssh/calmeq-tunnel.pem
+# ssh pi@mypi.local  "chmod 400 ~/.ssh/calmeq-tunnel.pem"
 
 # done!
 echo "Setup Complete"
