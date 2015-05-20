@@ -7,6 +7,9 @@ CALMEQ_DIR=/opt/calmeq-mypi
 echo "make bin directory executable"
 chmod a+x $CALMEQ_DIR/bin/*
 
+#start gpsd
+gpsd /dev/ttyUSB0
+
 # setup crontab
 echo "setup crontab for pi"
 crontab -u pi $CALMEQ_DIR/pi.crontab
