@@ -22,7 +22,7 @@ fi
 
 # make sure we have the latest tunnel script
 echo "get the latest tunnel script"
-diff $CALME_DIR/opt/calmeq-mypi/preinstall/calmeq-tunnel.sh /etc/network/if-up.d
+diff $CALME_DIR/opt/calmeq-mypi/preinstall/calmeq-tunnel.sh /etc/network/if-up.d > /dev/null
 if [[ $? -ne 0 ]]; then 
     /bin/cp $CALME_DIR/opt/calmeq-mypi/preinstall/calmeq-tunnel.sh /etc/network/if-up.d/
 fi
