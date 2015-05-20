@@ -27,5 +27,7 @@ else
     cd $PREVDIR
 fi
 
+sudo apt-get install -y gpsd gpsd-clients
+
 # run first time
 . $MYDIR/mypi-init.sh
