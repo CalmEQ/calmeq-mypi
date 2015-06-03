@@ -27,5 +27,6 @@ else
     cd $PREVDIR
 fi
 
+
 # run first time
 . $MYDIR/mypi-init.sh

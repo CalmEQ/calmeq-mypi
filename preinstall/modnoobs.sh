@@ -17,13 +17,13 @@ fi
 
 #1. Place calmeq-init.sh /etc/init.d and ensure its executable
 if [ -f $ROOTDIR/etc/init.d/calmeq-init.sh ]; then
-    echo "Init already exists"
-else
-    echo "Copying init"
-    /bin/cp calmeq-init.sh $ROOTDIR/etc/init.d
-    /bin/chmod a+x $ROOTDIR/etc/init.d/calmeq-init.sh
-#    update-rc.d calmeq-init.sh defaults
+   rm $ROOTDIR/etc/init.d/calmeq-init.sh 
 fi
+
+echo "Copying init"
+/bin/cp calmeq-init.sh $ROOTDIR/etc/init.d
+/bin/chmod a+x $ROOTDIR/etc/init.d/calmeq-init.sh
+#    update-rc.d calmeq-init.sh defaults
 
 #2. create a symlink from /etc/rc2.d/S10calmeq-init to /etc/init.d/calmeq-init.sh
 NLINK=S03calmeq-init.sh

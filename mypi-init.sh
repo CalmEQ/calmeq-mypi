@@ -7,6 +7,8 @@ CALMEQ_DIR=/opt/calmeq-mypi
 echo "make bin directory executable"
 chmod a+x $CALMEQ_DIR/bin/*
 
+sudo apt-get install -y gpsd gpsd-clients
+
 #start gpsd
 gpsd /dev/ttyUSB0
 
