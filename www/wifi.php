@@ -33,16 +33,17 @@ for development we're going to fake some of the
 
     <h1>Wifi Configuration</h1>
     <p>This page allows you to see and set the wifi configuration for the raspberry pi</p>
-    <h2>Current Status</h2>
+    <h3>Current Status</h3>
     <p>If an ip address is shown on a line with "inet addr" then the WiFi is up and connected</p>
     <pre><?php exec('/sbin/ifconfig wlan0', $ipinfo); echo implode("<br>", $ipinfo) ?></pre>
-    <h2>Saved Networks</h2>
+    <h3>Saved Networks</h3>
     <?php exec('/opt/calmeq-mypi/bin/listnetworks.sh', $list); echo implode("", $list) ?>
 
-    <div class="col-sm-3">
+    <div class="row">
+    <div class="col-sm-4">
       <div class="panel panel-primary">
 	<div class="panel-heading">
-	  <h2 class="panel-title">Add new network</h2>
+	  <h3 class="panel-title">Add new network</h3>
 	</div>
 	<div class="panel-body">
 	  <form action="setwifi.php" method="post">
@@ -54,10 +55,10 @@ for development we're going to fake some of the
 	</div>
       </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-4">
       <div class="panel panel-default">
 	<div class="panel-heading">
-          <h2 class="panel-title">Remove network</h2>
+          <h3 class="panel-title">Remove network</h3>
 	</div>
 	<div class="panel-body">
           <form action="removewifi.php" method="post">
@@ -68,6 +69,7 @@ for development we're going to fake some of the
 	</div>
       </div>
     </div>
+    <div>
     <br>
 
 
