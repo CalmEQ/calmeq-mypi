@@ -51,7 +51,7 @@ fi
 echo ""
 echo "--- update and setup webserver ---"
 sudo apt-get install -y apache2
-cp apache2/default /etc/apache2/sites-available/default
+cp $CALMEQ_DIR/apache2/default /etc/apache2/sites-available/default
 sudo apachectl -k start  # it should be up by default, but just to make sure
 
 
