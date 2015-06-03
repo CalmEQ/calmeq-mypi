@@ -54,6 +54,11 @@ sudo apt-get install -y apache2
 cp $CALMEQ_DIR/apache2/default /etc/apache2/sites-available/default
 sudo apachectl -k start  # it should be up by default, but just to make sure
 
+echo ""
+echo "--- give webserver user approriate permisions ---"
+sudo cp $CALMEQ_DIR/preinstall/calmeq.sudoers /etc/sudoers.d/calmeq
+sudo chmod 0440 /etc/sudoers.d/calmeq
+
 
 # done!
 echo ""
