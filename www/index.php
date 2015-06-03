@@ -8,7 +8,6 @@
     <h2>Wifi Configuration</h2>
     <a href="wifi.php">Wifi Configuration</a><br>
     <br>
-    Hi Lauren!!!
 
   </body>
 </html>

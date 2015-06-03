@@ -19,19 +19,19 @@ for development we're going to fake some of the
     <h2>Current Status: </h2>
     <pre><?php exec('/sbin/ifconfig wlan0', $ipinfo); echo implode("<br>", $ipinfo) ?></pre>
     <h2>Saved Networks</h2>
-    <table>
-      <tr>
-        <td>SSID</td><td>Passcode</td><td>KeyMgmt</td>
-      </tr>
-    </table>
-    <pre><?php system('whoami'); ?></pre>
-    <pre><?php exec('/home/pi/calmeq-mypi/bin/listnetworks.sh', $list); echo implode("<br>", $list) ?></pre>
+    <?php exec('/home/pi/calmeq-mypi/bin/listnetworks.sh', $list); echo implode("<br>", $list) ?>
 
-  <h2>Set new network</h2>
+  <h2>Add new network</h2>
   <form action="setwifi.php" method="post">
     <p>SSID: <input type="text" name="ssid" /></p>
     <p>Passcode: <input type="text" name="passcode" /></p>
     <p>KeyMgmt: <select name="keymgmt"><option value="WPA-PSK">WPA-PSK</option></select></p>
+    <p><input type="submit"/></p>
+  </form>
+
+  <h2>Remove network</h2>
+  <form action="removewifi.php" method="post">
+    <p>ID: <input type="text" name="id" /></p>
     <p><input type="submit"/></p>
   </form>
 
