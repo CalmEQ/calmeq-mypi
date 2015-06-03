@@ -26,6 +26,15 @@ for development we're going to fake some of the
     </table>
     <pre><?php system('whoami'); ?></pre>
     <pre><?php exec('/home/pi/calmeq-mypi/bin/listnetworks.sh', $list); echo implode("<br>", $list) ?></pre>
+
+  <h2>Set new network</h2>
+  <form action="setwifi.php" method="post">
+    <p>SSID: <input type="text" name="ssid" /></p>
+    <p>Passcode: <input type="text" name="passcode" /></p>
+    <p>KeyMgmt: <select name="keymgmt"><option value="WPA-PSK">WPA-PSK</option></select></p>
+    <p><input type="submit"/></p>
+  </form>
+
   </body>
   
   
