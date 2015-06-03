@@ -10,30 +10,72 @@ for development we're going to fake some of the
 
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
     <title>Wifi Configuration</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="theme.css" rel="stylesheet">
+
   </head>
   
   <body>
+    <div class="container theme-base" role="main">
+
     <h1>Wifi Configuration</h1>
     <p>This page allows you to see and set the wifi configuration for the raspberry pi</p>
-    <h2>Current Status: </h2>
+    <h2>Current Status</h2>
+    <p>If an ip address is shown on a line with "inet addr" then the WiFi is up and connected</p>
     <pre><?php exec('/sbin/ifconfig wlan0', $ipinfo); echo implode("<br>", $ipinfo) ?></pre>
     <h2>Saved Networks</h2>
-    <?php exec('/home/pi/calmeq-mypi/bin/listnetworks.sh', $list); echo implode("<br>", $list) ?>
+    <?php exec('/home/pi/calmeq-mypi/bin/listnetworks.sh', $list); echo implode("", $list) ?>
 
-  <h2>Add new network</h2>
-  <form action="setwifi.php" method="post">
-    <p>SSID: <input type="text" name="ssid" /></p>
-    <p>Passcode: <input type="text" name="passcode" /></p>
-    <p>KeyMgmt: <select name="keymgmt"><option value="WPA-PSK">WPA-PSK</option></select></p>
-    <p><input type="submit"/></p>
-  </form>
+    <div class="col-sm-3">
+      <div class="panel panel-primary">
+	<div class="panel-heading">
+	  <h2 class="panel-title">Add new network</h2>
+	</div>
+	<div class="panel-body">
+	  <form action="setwifi.php" method="post">
+	    <p>SSID: <br><input type="text" name="ssid" /></p>
+	    <p>Passcode: <br><input type="text" name="passcode" /></p>
+	    <p>KeyMgmt: <br><select name="keymgmt"><option value="WPA-PSK">WPA-PSK</option></select></p>
+	    <p><input type="submit" class="btn btn-primary" value="Add" /></p>
+	  </form>
+	</div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="panel panel-default">
+	<div class="panel-heading">
+          <h2 class="panel-title">Remove network</h2>
+	</div>
+	<div class="panel-body">
+          <form action="removewifi.php" method="post">
+	    <p>ID: <br><input type="text" name="id" /></p>
+	    <p><input type="submit"/></p>
+	  </form>
+	  
+	</div>
+      </div>
+    </div>
+    <br>
 
-  <h2>Remove network</h2>
-  <form action="removewifi.php" method="post">
-    <p>ID: <input type="text" name="id" /></p>
-    <p><input type="submit"/></p>
-  </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
   </body>
   
