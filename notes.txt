@@ -55,3 +55,26 @@ ssh -t -i .ssh/calmeq-tunnel.pem ubuntu@52.25.118.79 "ssh -p 3222 pi@localhost"
 
 <sudo apt-get install autossh>
 
+and its not working... not sure why
+looks like we didn't have the identify file in the .ssh, need a secure way to get that 
+file accross, and would like to not just post it on the interwebs to be seen
+instead it should be attached to the image for each raspberry pi
+
+ss -a | grep 300
+
+ssh -t -i ~/.ssh/calmeq-tunnel.pem ubuntu@52.25.118.79 "ssh -p 3001 pi@localhost"
+
+
+todo: add logging from the autossh script via 
+https://akntechblog.wordpress.com/2010/09/11/autossh-for-persistent-reverse-ssh-tunnels/
+
+last notes
+https://raymii.org/s/tutorials/Autossh_persistent_tunnels.html
+
+
+## setting up the webserver on the raspberry pi
+
+https://wiki.archlinux.org/index.php/WPA_supplicant#Connecting_with_wpa_cli
+
+http://superuser.com/questions/341102/how-to-connect-to-a-wifi-from-command-line-under-ubuntu-without-conf-file
+http://superuser.com/questions/181517/how-to-execute-a-command-whenever-a-file-changes

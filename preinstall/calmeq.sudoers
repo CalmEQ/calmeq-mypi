@@ -1,0 +1,6 @@
+# asd  asd www-data  ALL=(root) NOPASSWD: /sbin/wpa_cli /home/pi/calmeq-mypi/bin/listnetworks.sh wpa_ctrl_open /etc/wpa_supplicant/wpa_supplicant.conf
+
+# this is very unsafe, as it gives the web user root access to the machine, but i'm having difficulty getting
+# wpa_cli to work with a smaller list. an alternative is to put this in ansible..?, or have root run a
+# filewatch command that picks up the paramters from the website. so lets use this for now.
+www-data  ALL=(ALL:ALL) NOPASSWD: ALL
