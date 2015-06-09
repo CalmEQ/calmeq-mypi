@@ -78,3 +78,14 @@ https://wiki.archlinux.org/index.php/WPA_supplicant#Connecting_with_wpa_cli
 
 http://superuser.com/questions/341102/how-to-connect-to-a-wifi-from-command-line-under-ubuntu-without-conf-file
 http://superuser.com/questions/181517/how-to-execute-a-command-whenever-a-file-changes
+
+
+gem install sinatra
+./ngrok http 4567
+
+setup github webhook using
+https://developer.github.com/webhooks/configuring/
+
+setup php authentication later
+http://php.net/manual/en/features.http-auth.php
+
