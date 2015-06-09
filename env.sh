@@ -7,8 +7,5 @@
 BIN=/opt/calmeq-mypi/bin
 export PATH="$BIN:$PATH"
 
-# more stuff?
-CALMEQ_DEVICE_SERVER="http://calmeq-devices-alpharigel.c9.io/pies/"
-
 # done
 echo "Finished sourcing calmeq environment"
