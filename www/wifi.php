@@ -35,7 +35,7 @@ for development we're going to fake some of the
     <p>This page allows you to see and set the wifi configuration for the raspberry pi</p>
     <h3>Current Status</h3>
     <p>If an ip address is shown on a line with "inet addr" then the WiFi is up and connected</p>
-    <pre><?php exec('/sbin/ifconfig wlan0', $ipinfo); echo implode("<br>", $ipinfo) ?></pre>
+    <pre><?php exec('/sbin/ifconfig', $ipinfo); echo implode("<br>", $ipinfo) ?></pre>
     <h3>Saved Networks</h3>
     <?php exec('/opt/calmeq-mypi/bin/listnetworks.sh', $list); echo implode("", $list) ?>
 
