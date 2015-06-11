@@ -89,3 +89,26 @@ https://developer.github.com/webhooks/configuring/
 setup php authentication later
 http://php.net/manual/en/features.http-auth.php
 
+the best faq
+https://developer.github.com/guides/building-a-ci-server/
+
+
+
+# setting up the second wifi network:
+http://www.maketecheasier.com/set-up-raspberry-pi-as-wireless-access-point/
+
+
+http://www.instructables.com/id/How-to-make-a-WiFi-Access-Point-out-of-a-Raspberry/step2/null/
+http://elinux.org/RPI-Wireless-Hotspot
+https://www.raspberrypi.org/forums/viewtopic.php?f=36&t=19120
+
+looks like we needed the adafruit comiled version of hostap, which works fine.
+however the wlan0 is booting up first, and then dropping the dhcp connection when wlan1 starts
+potentially i can redo everything flipping wlan0 and wlan1, but that seems unlikely to help
+though that is the method used by other commentators
+
+the two method:
+https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=89756
+https://www.raspberrypi.org/forums/viewtopic.php?f=63&t=85721
+
+
