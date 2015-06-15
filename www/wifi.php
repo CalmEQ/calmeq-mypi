@@ -18,10 +18,10 @@ for development we're going to fake some of the
     <title>Wifi Configuration</title>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
 
     <!-- Custom styles for this template -->
     <link href="theme.css" rel="stylesheet">
@@ -35,7 +35,7 @@ for development we're going to fake some of the
     <p>This page allows you to see and set the wifi configuration for the raspberry pi</p>
     <h3>Current Status</h3>
     <p>If an ip address is shown on a line with "inet addr" then the WiFi is up and connected</p>
-    <pre><?php exec('/sbin/ifconfig wlan0', $ipinfo); echo implode("<br>", $ipinfo) ?></pre>
+    <pre><?php exec('/sbin/ifconfig', $ipinfo); echo implode("<br>", $ipinfo) ?></pre>
     <h3>Saved Networks</h3>
     <?php exec('/opt/calmeq-mypi/bin/listnetworks.sh', $list); echo implode("", $list) ?>
 
@@ -76,8 +76,7 @@ for development we're going to fake some of the
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 
   </body>
   

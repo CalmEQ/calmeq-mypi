@@ -7,10 +7,10 @@
 
     <title>CalmEQ RaspberryPi</title>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
 
     <!-- Custom styles for this template -->
     <link href="theme.css" rel="stylesheet">
@@ -25,6 +25,8 @@
       
       <h2>System Status</h2>
       <p><pre><?php system('uname -a') ?></pre></p>
+
+      <h2>GPS Info</h2>
       <br>
       <a href="wifi.php"><button class="btn btn-lg btn-primary">Wifi Configuration</button></a><br>
 
@@ -32,7 +34,7 @@
       <!-- Include all compiled plugins (below), or include individual files as needed -->
 
       <!-- Latest compiled and minified JavaScript -->
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+      <script src="bootstrap/js/bootstrap.min.js"></script>
 
     </div>
   </body>
