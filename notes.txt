@@ -112,3 +112,25 @@ https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=89756
 https://www.raspberrypi.org/forums/viewtopic.php?f=63&t=85721
 
 
+
+## saved stuff from emulator attempt:
+#!/bin/bash
+
+# do stuff here
+
+# get qemu
+sudo apt-get install qemu
+
+# get the kernel
+wget http://xecdesign.com/downloads/linux-qemu/kernel-qemu
+
+# get the image
+wget http://downloads.raspberrypi.org/raspbian_latest
+
+mv raspbian_latest rasbian-wheezy.zip
+unzip rasbian-wheezy.zip 
+
+# first boot
+qemu-system-arm -kernel kernel-qemu -cpu arm1176 -m 256 -M versatilepb \
+ -no-reboot -serial stdio -append "root=/dev/sda2 panic=1 rootfstype=ext4 rw init=/bin/bash" \
+ -hda 2015-05-05-raspbian-wheezy.img -nographic -curses
