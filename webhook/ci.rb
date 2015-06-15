@@ -35,7 +35,7 @@ def process_push_data(push_data)
   sha = head
   puts fullname
   puts sha
-  @client.create_status(fullname, sha, 'pending')
+  # @client.create_status(fullname, sha, 'pending')
 
   # for each commit to master do:
   # update repo on device (run the update command)
@@ -63,6 +63,6 @@ def process_push_data(push_data)
   #puts "I got some JSON: #{push.inspect}"
 
   # update status
-  @client.create_status(fullname, sha, 'success')
+  # @client.create_status(fullname, sha, 'success')
   puts "Local CI push processed!"
 end
