@@ -94,10 +94,6 @@ for development we're going to fake some of the
           </div>
           <div class="panel-body">
             <form action="resetwifi.php" method="post">
-              <p>ID:
-                <br>
-                <input type="text" name="id" />
-              </p>
               <p>
                 <input type="submit" />
               </p>

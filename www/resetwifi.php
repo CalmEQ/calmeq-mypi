@@ -20,9 +20,9 @@
   <body>
     <div class="container theme-base" role="main">
 
-    <h1>Resseting Wifi Configuration</h1>
+    <h1>Resetting Wifi Configuration</h1>
     <p>This resets the wifi based on the previously submited form: </p>
-    <h3>Result of remove</h3>
+    <h3>Result of reset</h3>
     <pre><?php exec('/opt/calmeq-mypi/bin/resetwifi.sh wlan0'. $_POST['id'],
                 $outtext); echo implode("<br>", $outtext) ?></pre>
     <br>
