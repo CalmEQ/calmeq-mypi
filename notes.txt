@@ -55,3 +55,82 @@ ssh -t -i .ssh/calmeq-tunnel.pem ubuntu@52.25.118.79 "ssh -p 3222 pi@localhost"
 
 <sudo apt-get install autossh>
 
+and its not working... not sure why
+looks like we didn't have the identify file in the .ssh, need a secure way to get that 
+file accross, and would like to not just post it on the interwebs to be seen
+instead it should be attached to the image for each raspberry pi
+
+ss -a | grep 300
+
+ssh -t -i ~/.ssh/calmeq-tunnel.pem ubuntu@52.25.118.79 "ssh -p 3001 pi@localhost"
+
+
+todo: add logging from the autossh script via 
+https://akntechblog.wordpress.com/2010/09/11/autossh-for-persistent-reverse-ssh-tunnels/
+
+last notes
+https://raymii.org/s/tutorials/Autossh_persistent_tunnels.html
+
+
+## setting up the webserver on the raspberry pi
+
+https://wiki.archlinux.org/index.php/WPA_supplicant#Connecting_with_wpa_cli
+
+http://superuser.com/questions/341102/how-to-connect-to-a-wifi-from-command-line-under-ubuntu-without-conf-file
+http://superuser.com/questions/181517/how-to-execute-a-command-whenever-a-file-changes
+
+
+gem install sinatra
+./ngrok http 4567
+
+setup github webhook using
+https://developer.github.com/webhooks/configuring/
+
+setup php authentication later
+http://php.net/manual/en/features.http-auth.php
+
+the best faq
+https://developer.github.com/guides/building-a-ci-server/
+
+
+
+# setting up the second wifi network:
+http://www.maketecheasier.com/set-up-raspberry-pi-as-wireless-access-point/
+
+
+http://www.instructables.com/id/How-to-make-a-WiFi-Access-Point-out-of-a-Raspberry/step2/null/
+http://elinux.org/RPI-Wireless-Hotspot
+https://www.raspberrypi.org/forums/viewtopic.php?f=36&t=19120
+
+looks like we needed the adafruit comiled version of hostap, which works fine.
+however the wlan0 is booting up first, and then dropping the dhcp connection when wlan1 starts
+potentially i can redo everything flipping wlan0 and wlan1, but that seems unlikely to help
+though that is the method used by other commentators
+
+the two method:
+https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=89756
+https://www.raspberrypi.org/forums/viewtopic.php?f=63&t=85721
+
+
+
+## saved stuff from emulator attempt:
+#!/bin/bash
+
+# do stuff here
+
+# get qemu
+sudo apt-get install qemu
+
+# get the kernel
+wget http://xecdesign.com/downloads/linux-qemu/kernel-qemu
+
+# get the image
+wget http://downloads.raspberrypi.org/raspbian_latest
+
+mv raspbian_latest rasbian-wheezy.zip
+unzip rasbian-wheezy.zip 
+
+# first boot
+qemu-system-arm -kernel kernel-qemu -cpu arm1176 -m 256 -M versatilepb \
+ -no-reboot -serial stdio -append "root=/dev/sda2 panic=1 rootfstype=ext4 rw init=/bin/bash" \
+ -hda 2015-05-05-raspbian-wheezy.img -nographic -curses
