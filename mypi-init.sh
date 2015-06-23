@@ -3,6 +3,9 @@
 CALMEQ_DIR=/opt/calmeq-mypi
 # this runs on boot (or after fresh download) to ensure the raspberry is properly configured
 
+#make sure all the packages needed are installed
+
+sudo apt-get install -y python-numpy python-httplib2 python-pyaudio python-scipy
 # ensure bin directory is executable
 echo ""
 echo "--- make bin directory executable ---"
@@ -61,6 +64,7 @@ echo "--- give webserver user approriate permisions ---"
 sudo cp $CALMEQ_DIR/preinstall/calmeq.sudoers /etc/sudoers.d/calmeq
 sudo chmod 0440 /etc/sudoers.d/calmeq
 
+python $CALMEQ_DIR/python/record_and_push.py &
 
 # done!
 echo ""
