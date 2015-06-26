@@ -12,8 +12,8 @@ import urlparse
 import subprocess
  
 RECORD_SECONDS = 10
-#CALMEQ_DEVICE_SERVER="http://calmeq-devices.herokuapp.com"
-CALMEQ_DEVICE_SERVER="https://calmeq-devices-alpharigel.c9.io"
+CALMEQ_DEVICE_SERVER="http://calmeq-devices.herokuapp.com"
+#CALMEQ_DEVICE_SERVER="https://calmeq-devices-alpharigel.c9.io"
 
 output = subprocess.check_output("cat /sys/class/net/eth0/address", shell=True)
 MAC=output.strip("\n")
