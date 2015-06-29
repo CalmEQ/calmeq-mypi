@@ -20,27 +20,46 @@ if [[ ! $CALMEQ_DEVICE_SERVER ]]; then
     CALMEQ_DEVICE_SERVER="http://calmeq-devices.herokuapp.com"
 #    CALMEQ_DEVICE_SERVER="https://calmeq-devices-alpharigel.c9.io"
 fi
+PIES_SITE=$CALMEQ_DEVICE_SERVER/pies
 
-TRUEVAR=1
-ID=$( curl -X POST --data identifier=$MAC $CALMEQ_DEVICE_SERVER/pies )
-if [ $ID -eq 0 ]; then
-    TRUEVAR=0
-fi
-SITE=$CALMEQ_DEVICE_SERVER/pies/$ID/readings
+# Leave ID unset.  Script will fetch it from server
+ID=
+
     
 while [ $TRUEVAR -eq 1 ]; do 
+
+    # Fetch device id, if one is not set. POST on "/pies" with identifier (required) and 
+    # other attributes in json format.  
+    # Curl error handling notes
+    # --fail returns numerical error code instead of an HTML document with an error. Need that
+    # --silent supresses crap like progress bar
+
+    if [ -z "$ID" ]; then
+        resp_json=$(curl --silent --fail -X POST $PIES_SITE \
+        -d '{"py": {"identifier":"'$MAC'", "devicetime":"'$NOW'", "notes":"Hello from Pi"}}' \
+        -H "Accept: application/json" -H "Content-Type: application/json")
+
+         if [ ! -z "$resp_json" ]; then
+            tmp=$(echo $resp_json | jq '.id')
+            if [ ! -z "$tmp" ]; then
+                ID=$tmp
+            fi
+        fi
+    fi
+
     LAT=$( tail -n 30 ~/gpstrack.xml  | grep '<trkpt' | tail -n 1 | sed 's:.*lat="\([-0-9.]*\)".*:\1:g' )
     LON=$( tail -n 30 ~/gpstrack.xml  | grep '<trkpt' | tail -n 1 | sed 's:.*lon="\([-0-9.]*\)".*:\1:g' )
     NOW=$( date )
     DBLVL=$( python $PYDIR/record.py )
 
-    curl -X POST -d "reading[lat]=$LAT" -d "reading[identifier]=$MAC"  -d "reading[lon]=$LON" -d "reading[dblvl]=$DBLVL" -d "reading[devicetime]=$NOW reading[py_id]=$ID"  $SITE
-
-    if [ $ONCE -eq 1 ]; then
-	TRUEVAR=0
-    else
-	sleep $DELAY
+    # We many not have device id yet. 
+    if [ ! -z "$ID" ]; then
+        resp_json=$(curl --silent --fail -X POST $PIES_SITE/$ID/readings \
+            -d '{"reading": {"lat":"'$LAT'", "identifier":"'$MAC'", "lon":"'$LON'", "dblvl":"'$DBLVL'", "devicetime":"'$NOW'" }}' \
+            -H "Accept: application/json" -H "Content-Type: application/json")
     fi
+
+	sleep $DELAY
 done
 
 echo "Complete!"
