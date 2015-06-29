@@ -26,7 +26,7 @@ PIES_SITE=$CALMEQ_DEVICE_SERVER/pies
 ID=
 
     
-while [ $TRUEVAR -eq 1 ]; do 
+while true ; do 
 
     # Fetch device id, if one is not set. POST on "/pies" with identifier (required) and 
     # other attributes in json format.  
