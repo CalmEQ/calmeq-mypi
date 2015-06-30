@@ -24,7 +24,7 @@ CALMEQ_DEVICE_SERVER_DEV="https://calmeq-devices-alpharigel.c9.io"
 output = subprocess.check_output("cat /sys/class/net/eth0/address", shell=True)
 MAC=output.strip("\n")
 
-def register_device( siteaddress ):
+def register_device( siteaddress, once=False ):
     """ 
     Get the device number from the server
     """
@@ -38,7 +38,10 @@ def register_device( siteaddress ):
             break
         else:
             print "registering device returned ", status, ". Retrying after 30 seconds"
-            time.sleep(30)
+            if once:
+                break
+            else:
+                time.sleep(30)
     return r.json['id']
 
 def A_weighting(fs):
@@ -98,8 +101,9 @@ def push_data(db, id, siteaddress):
         print "push_data returned error", r.status_code
     else:
         print "pushing noise level = ", db, "response status = ", r.status_code
+    return r.status_code
 
-def main( once=False, insiteaddress="PROD" ):
+def main(  insiteaddress="PROD", once=False ):
     """
     setup the audio stream and record it
     """
@@ -168,6 +172,27 @@ def main( once=False, insiteaddress="PROD" ):
         time.sleep(60 - RECORD_SECONDS)
 
     p.terminate()
+    return True
+
+def test_register_device():
+    siteaddress=CALMEQ_DEVICE_SERVER_QA
+    id = register_device( siteaddress, True )
+    assert id >= 0
+
+def test_A_weighting():
+    #TODO: @cprohan add a unit test here
+    assert True
+
+def test_push_data():
+    db = 42.42
+    id = 11
+    siteaddress = CALMEQ_DEVICE_SERVER_QA
+    statuscode = push_data(db, id, siteaddress)
+    assert statuscode == 200
+
+def test_main():
+    isgood = main( "QA", True )
+    assert isgood
 
 
 if __name__ == "__main__":
@@ -178,4 +203,4 @@ if __name__ == "__main__":
                         + "or DEV, or an full server address", default="PROD" )
     args = parser.parse_args();
 
-    main( args.once, args.site )
+    main( args.site, args.once )
