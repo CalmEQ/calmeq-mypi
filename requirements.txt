@@ -1,0 +1,27 @@
+PIL==1.1.7
+PyAudio==0.2.4
+RPi.GPIO==0.5.11
+argparse==1.2.1
+chardet==2.0.1
+## FIXME: could not find svn URL in dependency_links for this package:
+distribute==0.6.24dev-r0
+gevent==0.13.6
+gps==3.6
+greenlet==0.3.1
+httplib2==0.7.4
+mcpi==0.1.1
+numpy==1.6.2
+oauthlib==0.1.2
+picamera==1.9
+pifacecommon==4.1.2
+pifacedigitalio==3.0.4
+py==1.4.30
+pycrypto==2.6
+pygame==1.9.1release
+pygobject==3.8.2
+pyserial==2.5
+pytest==2.7.2
+requests==0.12.1
+scipy==0.10.1
+six==1.1.0
+wsgiref==0.1.2

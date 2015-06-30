@@ -1,3 +1,5 @@
 test:
   override:
-    - bash test/bin/quicktest.sh # use our custom test scriptx
+     - py.test python/record_and_push.py
+
+#    - bash test/bin/quicktest.sh # use our custom test scriptx
