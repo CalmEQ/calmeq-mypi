@@ -4,8 +4,10 @@ CALMEQ_DIR=/opt/calmeq-mypi
 # this runs on boot (or after fresh download) to ensure the raspberry is properly configured
 
 #make sure all the packages needed are installed
+echo ""
+echo "--- installing python packages ---"
+sudo apt-get install -y python-numpy python-httplib2 python-pyaudio python-scipy python-requests
 
-sudo apt-get install -y python-numpy python-httplib2 python-pyaudio python-scipy
 # ensure bin directory is executable
 echo ""
 echo "--- make bin directory executable ---"

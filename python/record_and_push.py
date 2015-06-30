@@ -1,3 +1,5 @@
+#!/usr/bin/env python 
+
 import os
 import time
 import pyaudio
@@ -10,26 +12,34 @@ from httplib2 import Http
 from urllib import urlencode
 import urlparse
 import subprocess
+import requests
+import argparse
+import json
  
 RECORD_SECONDS = 10
-CALMEQ_DEVICE_SERVER="http://calmeq-devices.herokuapp.com"
-#CALMEQ_DEVICE_SERVER="https://calmeq-devices-alpharigel.c9.io"
+CALMEQ_DEVICE_SERVER_PROD="http://calmeq-devices.herokuapp.com"
+CALMEQ_DEVICE_SERVER_QA="http://calmeq-devices-qa.herokuapp.com"
+CALMEQ_DEVICE_SERVER_DEV="https://calmeq-devices-alpharigel.c9.io"
 
 output = subprocess.check_output("cat /sys/class/net/eth0/address", shell=True)
 MAC=output.strip("\n")
 
-def register_device():
+def register_device( siteaddress ):
+    """ 
+    Get the device number from the server
+    """
     while True:
-        h = Http()
-        data = dict(identifier=MAC)
-        resp, content = h.request(CALMEQ_DEVICE_SERVER + "/pies", "POST", urlencode(data))
-        status = resp.status
+        payload = { 'py': {'identifier': MAC } }
+        headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
+        site = siteaddress + "/pies"
+        r = requests.post( site, data=json.dumps(payload), headers=headers)
+        status = r.status_code
         if status == 200:
             break
         else:
             print "registering device returned ", status, ". Retrying after 30 seconds"
             time.sleep(30)
-    return content
+    return r.json['id']
 
 def A_weighting(fs):
     """Design of an A-weighting filter.
@@ -65,9 +75,12 @@ def rms_flat(a):  # from matplotlib.mlab
     Return the root mean square of all the elements of *a*, flattened out.
     """
     return numpy.sqrt(numpy.mean(numpy.absolute(a)**2))
- 
-def push_data(db, id):
-    SITE=CALMEQ_DEVICE_SERVER + "/pies/" + id + "/readings"
+  
+def push_data(db, id, siteaddress):
+    """
+    push new data to the website
+    """
+    SITE = siteaddress + "/pies/" + str(id) + "/readings"
     temp = "tail -n 30 ~/gpstrack.xml  | grep '<trkpt' | tail -n 1 | sed 's:.*lat=\"\([-0-9.]*\)\".*:\\1:g'"
     output = subprocess.check_output(temp, shell=True)
     LAT=output.strip("\n")
@@ -76,62 +89,93 @@ def push_data(db, id):
     LON=output.strip("\n")
     output = subprocess.check_output("date", shell=True)
     NOW=output.strip("\n")
-    h = Http()
-    temp="reading[lat]=" + LAT + "&reading[lon]=" + LON + "&reading[devicetime]=" + NOW + "&reading[dblvl]=" + str(db)
-    url_dict = urlparse.parse_qs(temp)
-    resp, content = h.request(SITE, "POST", urlencode(url_dict, True))
-    if resp.status != 302:
-        print "push_data returned error", resp.status
+
+    payload = {'reading': {'lat':LAT, 'lon':LON, 'devicetime':NOW, 'dblvl':db} };
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
+    r = requests.post( SITE, data=json.dumps(payload), headers=headers)
+
+    if r.status_code != 200:
+        print "push_data returned error", r.status_code
     else:
-        print "pushing noise level = ", db, "response status = ", resp.status
+        print "pushing noise level = ", db, "response status = ", r.status_code
 
-# initialize portaudio
-p = pyaudio.PyAudio()
-device_index=-1
-while device_index == -1:
-    info = p.get_host_api_info_by_index(0)
-    numdevices = info.get('deviceCount')
-    #find USB audio device by iterating through each audio device
-    for i in range (0,numdevices):
-        if "USB" in p.get_device_info_by_host_api_device_index(0,i).get('name'):
-            device_index = i
+def main( once=False, insiteaddress="PROD" ):
+    """
+    setup the audio stream and record it
+    """
+
+    # replacement for switch statement. the get() at the end returns a default value if it is not found
+    # http://stackoverflow.com/questions/60208/replacements-for-switch-statement-in-python
+    siteaddress = {
+        'PROD': CALMEQ_DEVICE_SERVER_PROD,
+        'QA':   CALMEQ_DEVICE_SERVER_QA,
+        'DEV':  CALMEQ_DEVICE_SERVER_DEV,
+        }.get( insiteaddress, insiteaddress )
+
+    # initialize portaudio
+    p = pyaudio.PyAudio()
+    device_index=-1
+    while device_index == -1:
+        info = p.get_host_api_info_by_index(0)
+        numdevices = info.get('deviceCount')
+        #find USB audio device by iterating through each audio device
+        for i in range (0,numdevices):
+            if "USB" in p.get_device_info_by_host_api_device_index(0,i).get('name'):
+                device_index = i
+                break
+        if device_index == -1:
+            print "Couldnt find USB microphone. Retrying after 30 seconds"
+            time.sleep(30)
+
+    devinfo = p.get_device_info_by_index(device_index)
+
+    RATE=int(devinfo["defaultSampleRate"])
+    CHUNKSIZE = RATE / 10
+    b, a = A_weighting(RATE)
+
+    ID=register_device( siteaddress )
+    print "device id on server is", ID
+
+    loop=1
+    while loop:
+        stream = p.open (rate=RATE,
+                         input_device_index=device_index,
+                         channels=devinfo['maxInputChannels'],
+                         format=pyaudio.paInt16,
+                         input=True,
+                         frames_per_buffer=CHUNKSIZE)
+        frames = [] # A python-list of chunks(numpy.ndarray)
+        for _ in range(0, int((RATE / CHUNKSIZE) * RECORD_SECONDS)):
+            data = stream.read(CHUNKSIZE)
+            frames.append(numpy.fromstring(data, dtype=numpy.int16))
+
+        #Convert the list of numpy-arrays into a 1D array (column-wise)
+        numpydata = numpy.hstack(frames)
+        #print('Original:   {:+.2f} dB'.format(10*numpy.log10(rms_flat(numpydata)) + 47))
+        y = lfilter(b, a, numpydata)
+        db = 10*numpy.log10(rms_flat(y)) + 47
+        push_data(db, ID, siteaddress)
+
+        # close stream
+        stream.stop_stream()
+        stream.close()
+
+        # break out if running only once
+        if once:
             break
-    if device_index == -1:
-        print "Couldnt find USB microphone. Retrying after 30 seconds"
-        time.sleep(30)
+        
+        # else sleep if off
+        time.sleep(60 - RECORD_SECONDS)
 
-devinfo = p.get_device_info_by_index(device_index)
+    p.terminate()
 
-RATE=int(devinfo["defaultSampleRate"])
-CHUNKSIZE = RATE / 10
-b, a = A_weighting(RATE)
 
-ID=register_device()
-print "device id on server is", ID
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser();
+    parser.add_argument("-o", "--once", help="run the script once, instead of looping",
+                        action="store_true" )
+    parser.add_argument("-s", "--site", help="device server to use, such as PROD, QA," 
+                        + "or DEV, or an full server address", default="PROD" )
+    args = parser.parse_args();
 
-loop=1
-while loop:
-    stream = p.open (rate=RATE,
-                 input_device_index=device_index,
-                 channels=devinfo['maxInputChannels'],
-                 format=pyaudio.paInt16,
-                 input=True,
-                 frames_per_buffer=CHUNKSIZE)
-    frames = [] # A python-list of chunks(numpy.ndarray)
-    for _ in range(0, int((RATE / CHUNKSIZE) * RECORD_SECONDS)):
-        data = stream.read(CHUNKSIZE)
-        frames.append(numpy.fromstring(data, dtype=numpy.int16))
-
-    #Convert the list of numpy-arrays into a 1D array (column-wise)
-    numpydata = numpy.hstack(frames)
-    #print('Original:   {:+.2f} dB'.format(10*numpy.log10(rms_flat(numpydata)) + 47))
-    y = lfilter(b, a, numpydata)
-    db = 10*numpy.log10(rms_flat(y)) + 47
-    push_data(db, ID)
-    time.sleep(60 - RECORD_SECONDS)
-    # close stream
-    stream.stop_stream()
-    stream.close()
-
-p.terminate()
-
+    main( args.once, args.site )
