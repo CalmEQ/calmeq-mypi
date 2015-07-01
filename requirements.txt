@@ -5,3 +5,5 @@
 # numpy
 # requests
 # scipy
+
+pytest
