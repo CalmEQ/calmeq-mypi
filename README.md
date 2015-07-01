@@ -5,6 +5,7 @@ Git directory of scripts and configuration to initialize, configure and run a ra
 ## Organization
 
 This repo is basically three projects in one:
+
 1. Setup and initial configuration for a raspberry pi into a calmeq mypi
 2. Record, process, and push noise lvls to the calmeq-devices server
 3. Webserver to view and configure the raspberry pi by connecting directly to the device
@@ -32,6 +33,7 @@ at the root level. A partial listing
 ## Testing
 
 Current testing paradigm is two-fold:
+
 1. Circle-ci testing for the python scripts, and anything else we can isolate from the pi
 2. A dedicated raspberry pi setup to pull latest code and test the setup, recording, and push. Full integegration testing
 
