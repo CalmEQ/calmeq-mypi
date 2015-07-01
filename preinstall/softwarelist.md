@@ -9,3 +9,7 @@
 6. sudo apt-get install ntp   # times are drifting away
 7. sudo apt-get install jq    # json parsor
 
+used for development purposes
+8. sudo apt-get install avahi-daemon netatalk # connect as HOSTNAME.local
+9. sudo apt-get install samba samba-common-bin # file system transfers
+
