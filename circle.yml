@@ -1,6 +1,6 @@
-dependencies:
-  pre:
-    - sudo apt-get update; sudo apt-get install -y python-numpy python-pyaudio python-scipy python-requests
+#dependencies:
+#  pre:
+#    - sudo apt-get update; sudo apt-get install -y python-numpy python-pyaudio python-scipy python-requests
 
 test:
   override:
