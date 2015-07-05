@@ -15,6 +15,7 @@ import subprocess
 import requests
 import argparse
 import json
+import pytest
  
 RECORD_SECONDS = 10
 CALMEQ_DEVICE_SERVER_PROD="http://calmeq-devices.herokuapp.com"
