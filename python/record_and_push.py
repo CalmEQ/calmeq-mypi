@@ -190,7 +190,7 @@ def test_push_data():
     statuscode = push_data(db, id, siteaddress)
     assert statuscode == 200
 
-@pytest.mark.skipif(os.environ.get('CIRCLECI') reason="requires audio card")
+@pytest.mark.skipif(os.environ.get('CIRCLECI'), reason="requires audio card")
 def test_main():
     isgood = main( "QA", True )
     assert isgood
