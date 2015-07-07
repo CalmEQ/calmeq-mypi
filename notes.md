@@ -134,3 +134,17 @@ unzip rasbian-wheezy.zip
 qemu-system-arm -kernel kernel-qemu -cpu arm1176 -m 256 -M versatilepb \
  -no-reboot -serial stdio -append "root=/dev/sda2 panic=1 rootfstype=ext4 rw init=/bin/bash" \
  -hda 2015-05-05-raspbian-wheezy.img -nographic -curses
+
+
+
+# wpa_cli not working, because 
+  Could not connect to wpa_supplicant - re-trying
+  Failed to connect to wpa_supplicant - wpa_ctrl_open: No such file or directory
+
+http://unix.stackexchange.com/questions/114066/wifi-error-wpa-supplicant
+
+
+i suspect that the problem is with the autossh command, which is running when 
+wlan1 boots up, thus laucning a second autossh command. this then probably 
+creates issues with wlan0 and the other booting up autossh
+

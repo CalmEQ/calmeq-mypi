@@ -16,6 +16,7 @@ import json
 import logging
 import logging.handlers
 import wave
+import pytest
  
 RECORD_SECONDS  = 10
 RECORD_INTERVAL = 15
@@ -58,7 +59,11 @@ def register_device( siteaddress, once=False ):
                 break
             else:
                 time.sleep(30)
-    return r.json['id']
+                
+    if callable(r.json):
+        return r.json().get('id')
+    else:
+        return r.json['id']
 
 def A_weighting(fs):
     """Design of an A-weighting filter.
@@ -229,6 +234,7 @@ def test_push_data():
     statuscode = push_data(db, id, siteaddress)
     assert statuscode == 200
 
+@pytest.mark.skipif(os.environ.get('CIRCLECI') == 'true', reason="requires audio card")
 def test_main():
     isgood = main( "QA", True )
     assert isgood
