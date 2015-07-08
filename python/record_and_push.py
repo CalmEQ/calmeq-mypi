@@ -1,5 +1,3 @@
-#!/usr/bin/env python 
-
 import os
 import time
 import pyaudio
@@ -15,15 +13,33 @@ import subprocess
 import requests
 import argparse
 import json
+import logging
+import logging.handlers
+import wave
 import pytest
  
-RECORD_SECONDS = 10
+RECORD_SECONDS  = 10
+RECORD_INTERVAL = 15
+MA_SAMPLES      = 10
+W_FILE_HISTORY  = 10
 CALMEQ_DEVICE_SERVER_PROD="http://calmeq-devices.herokuapp.com"
 CALMEQ_DEVICE_SERVER_QA="http://calmeq-devices-qa.herokuapp.com"
 CALMEQ_DEVICE_SERVER_DEV="https://calmeq-devices-alpharigel.c9.io"
 
 output = subprocess.check_output("cat /sys/class/net/eth0/address", shell=True)
 MAC=output.strip("\n")
+
+LOG_FILENAME = '/home/pi/record_and_push.log'
+
+# Set up a specific logger with our desired output level
+my_logger = logging.getLogger('MyLogger')
+my_logger.setLevel(logging.DEBUG)
+
+# Add the log message handler to the logger
+handler = logging.handlers.RotatingFileHandler(
+              LOG_FILENAME, maxBytes=1048576, backupCount=5)
+
+my_logger.addHandler(handler)
 
 def register_device( siteaddress, once=False ):
     """ 
@@ -38,13 +54,14 @@ def register_device( siteaddress, once=False ):
         if status == 200:
             break
         else:
-            print "registering device returned ", status, ". Retrying after 30 seconds"
+            my_logger.debug('registering device returned %d. Retrying after 30 seconds' % status)
             if once:
                 break
             else:
                 time.sleep(30)
-    if callable( r.json ):
-        return r.json()['id']
+
+    if callable(r.json):
+        return r.json().get('id')
     else:
         return r.json['id']
 
@@ -102,9 +119,9 @@ def push_data(db, id, siteaddress):
     r = requests.post( SITE, data=json.dumps(payload), headers=headers)
 
     if r.status_code != 200:
-        print "push_data returned error", r.status_code
+        my_logger.debug('push data returned error %d' % r.status_code)
     else:
-        print "pushing noise level = ", db, "response status = ", r.status_code
+        my_logger.debug('pushing noise level %.4f, response status %d' %(db, r.status_code))
     return r.status_code
 
 def main(  insiteaddress="PROD", once=False ):
@@ -132,7 +149,7 @@ def main(  insiteaddress="PROD", once=False ):
                 device_index = i
                 break
         if device_index == -1:
-            print "Couldnt find USB microphone. Retrying after 30 seconds"
+            my_logger.debug('Couldnt find USB microphone. Retrying after 30 seconds')
             time.sleep(30)
 
     devinfo = p.get_device_info_by_index(device_index)
@@ -143,8 +160,11 @@ def main(  insiteaddress="PROD", once=False ):
 
     ID=register_device( siteaddress )
     print "device id on server is", ID
+    my_logger.debug('device id on server is %d' % ID)
 
     loop=1
+    ma = []
+    count = 0
     while loop:
         stream = p.open (rate=RATE,
                          input_device_index=device_index,
@@ -159,9 +179,29 @@ def main(  insiteaddress="PROD", once=False ):
 
         #Convert the list of numpy-arrays into a 1D array (column-wise)
         numpydata = numpy.hstack(frames)
+ 
         #print('Original:   {:+.2f} dB'.format(10*numpy.log10(rms_flat(numpydata)) + 47))
         y = lfilter(b, a, numpydata)
         db = 10*numpy.log10(rms_flat(y)) + 47
+        if (len(ma) < MA_SAMPLES):
+            ma.append(db)
+        else:
+            mean = numpy.mean(ma)
+            std  = numpy.std(ma)
+            if db > (mean + std):
+                my_logger.debug('found clip of interest %.4f, %.4f, %.4f' % (db, mean, std))
+                wav_file_name = '/home/pi/recorded_clip-%d.wav' % (count % W_FILE_HISTORY)
+                count = count + 1
+                fp = wave.open(wav_file_name, "w")
+                fp.setnchannels(1)
+                fp.setsampwidth(2)
+                fp.setframerate(RATE)
+                fp.writeframes(numpydata)
+                fp.close()
+            else:
+                my_logger.debug('did not find clip of interest %.4f, %.4f, %.4f' % (db, mean, std))
+            ma.pop(0)
+            ma.append(db)
         push_data(db, ID, siteaddress)
 
         # close stream
@@ -173,7 +213,7 @@ def main(  insiteaddress="PROD", once=False ):
             break
         
         # else sleep if off
-        time.sleep(60 - RECORD_SECONDS)
+        time.sleep(RECORD_INTERVAL - RECORD_SECONDS)
 
     p.terminate()
     return True
