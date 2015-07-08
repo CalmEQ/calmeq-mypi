@@ -17,6 +17,8 @@ import logging
 import logging.handlers
 import wave
 import pytest
+from os.path import expanduser
+
  
 RECORD_SECONDS  = 10
 RECORD_INTERVAL = 15
@@ -29,7 +31,8 @@ CALMEQ_DEVICE_SERVER_DEV="https://calmeq-devices-alpharigel.c9.io"
 output = subprocess.check_output("cat /sys/class/net/eth0/address", shell=True)
 MAC=output.strip("\n")
 
-LOG_FILENAME = '/home/pi/record_and_push.log'
+home = expanduser("~")
+LOG_FILENAME = home + '/record_and_push.log'
 
 # Set up a specific logger with our desired output level
 my_logger = logging.getLogger('MyLogger')
