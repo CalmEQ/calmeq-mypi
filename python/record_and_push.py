@@ -42,7 +42,10 @@ def register_device( siteaddress, once=False ):
                 break
             else:
                 time.sleep(30)
-    return r.json['id']
+    if callable( r.json ):
+        return r.json()['id']
+    else:
+        return r.json['id']
 
 def A_weighting(fs):
     """Design of an A-weighting filter.
