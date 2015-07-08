@@ -1,5 +1,6 @@
 # calmeq-mypi
 [![Circle CI](https://circleci.com/gh/CalmEQ/calmeq-mypi.svg?style=shield)](https://circleci.com/gh/CalmEQ/calmeq-mypi)
+[![Dependency Status](https://gemnasium.com/CalmEQ/calmeq-mypi.svg)](https://gemnasium.com/CalmEQ/calmeq-mypi)
 
 Git directory of scripts and configuration to initialize, configure and run a raspberry pi
 
