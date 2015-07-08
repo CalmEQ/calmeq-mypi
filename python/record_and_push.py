@@ -59,7 +59,7 @@ def register_device( siteaddress, once=False ):
                 break
             else:
                 time.sleep(30)
-                
+
     if callable(r.json):
         return r.json().get('id')
     else:
