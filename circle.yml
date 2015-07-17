@@ -5,6 +5,7 @@ machine:
 dependencies:
   pre:
     - sudo apt-get update; sudo apt-get install -y python-numpy python-pyaudio python-scipy python-requests
+    - pip install -e .
 
 # can use the standard now, since we've pulled the test code into the test directory
 test:
