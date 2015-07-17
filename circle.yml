@@ -10,6 +10,6 @@ dependencies:
 # can use the standard now, since we've pulled the test code into the test directory
 test:
   override:
-     - py.test
+     - py.test test
 
 #    - bash test/bin/quicktest.sh # use our custom test scriptx
