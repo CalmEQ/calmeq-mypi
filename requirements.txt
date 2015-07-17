@@ -1,7 +1,12 @@
 # use sudo apt-get to get python dependencies for now
-#--allow-external --allow-unverified PyAudio
-#numpy
-#requests
-#scipy
+requests
+boto3
 
+# development dependencies
 pytest
+awscli
+
+# none of these build very easily
+#--allow-unverified  pyaudio --allow-external pyaudio pyaudio
+#numpy 
+#scipy 
