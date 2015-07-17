@@ -9,6 +9,8 @@ dependencies:
 
 # can use the standard now, since we've pulled the test code into the test directory
 test:
+  pre:
+    - sudo bash -c 'echo "11" > /etc/calmeq-device-id'
   override:
      - py.test test
 
