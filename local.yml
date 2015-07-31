@@ -1,0 +1,11 @@
+---
+# do a couple of things:
+# setup (and insure) we have an ansible-pull ready to go to keep this updated
+
+# setup the crontab to keep this live
+- include ansible/ansible-pull.yml
+
+# do other things here
+- tasks:
+  - name: add to device server
+    command: bash ansible/firsttime.sh
