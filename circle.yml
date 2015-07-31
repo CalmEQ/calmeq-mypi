@@ -5,9 +5,13 @@ machine:
 dependencies:
   pre:
     - sudo apt-get update; sudo apt-get install -y python-numpy python-pyaudio python-scipy python-requests
+    - pip install -e .
 
+# can use the standard now, since we've pulled the test code into the test directory
 test:
+  pre:
+    - sudo bash -c 'echo "11" > /etc/calmeq-device-id'
   override:
-     - py.test python/record_and_push.py
+     - py.test test
 
 #    - bash test/bin/quicktest.sh # use our custom test scriptx

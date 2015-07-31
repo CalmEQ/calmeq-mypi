@@ -148,3 +148,29 @@ i suspect that the problem is with the autossh command, which is running when
 wlan1 boots up, thus laucning a second autossh command. this then probably 
 creates issues with wlan0 and the other booting up autossh
 
+
+## python setup
+
+I saved this into a initdev.sh script, but can't find it now so repeating the 
+basic steps here. 
+
+1) Get pip through `sudo apt-get install python-pip`
+2) get virtualenv through `pip install virtualenv`
+3) create a virtual environment through `virtualenv ../venv`
+4) use that virutal environment through `source ../venv/bin/activate`
+5) pull down the dependencies using `pip install -r requirements.txt`
+6) build the package `pip install -e .`
+7) get the s3 key from a secure location (google drive/accesskeys) and place into `~/.aws/credentials`
+8) touch the device id at `/etc/calmeq-device-id` (used for the s3 upload)
+9) get the required dependencies `sudo apt-get update; sudo apt-get install -y python-numpy python-pyaudio python-scipy`
+10) test your code by running `py.test`
+
+## amazon aws s3 setup
+http://boto3.readthedocs.org/en/latest/guide/quickstart.html
+Alternatively, you can create the credential file yourself. By default, its location is at ~/.aws/credentials:
+
+    [default]
+    aws_access_key_id = YOUR_ACCESS_KEY
+    aws_secret_access_key = YOUR_SECRET_KEY
+
+circleCI saves the aws keys on the website itself, so we dont need to store them anywhere.
