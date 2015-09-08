@@ -16,7 +16,6 @@ import json
 import logging
 import logging.handlers
 import wave
-import pytest
 from os.path import expanduser
 
  
@@ -220,27 +219,6 @@ def main(  insiteaddress="PROD", once=False ):
 
     p.terminate()
     return True
-
-def test_register_device():
-    siteaddress=CALMEQ_DEVICE_SERVER_QA
-    id = register_device( siteaddress, True )
-    assert id >= 0
-
-def test_A_weighting():
-    #TODO: @cprohan add a unit test here
-    assert True
-
-def test_push_data():
-    db = 42.42
-    id = 11
-    siteaddress = CALMEQ_DEVICE_SERVER_QA
-    statuscode = push_data(db, id, siteaddress)
-    assert statuscode == 200
-
-@pytest.mark.skipif(os.environ.get('CIRCLECI') == 'true', reason="requires audio card")
-def test_main():
-    isgood = main( "QA", True )
-    assert isgood
 
 
 if __name__ == "__main__":
