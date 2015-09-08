@@ -148,3 +148,16 @@ i suspect that the problem is with the autossh command, which is running when
 wlan1 boots up, thus laucning a second autossh command. this then probably 
 creates issues with wlan0 and the other booting up autossh
 
+
+
+## python setup
+
+I saved this into a initdev.sh script, but can't find it now so repeating the 
+basic steps here. 
+
+1) Get pip through `sudo apt-get install python-pip`
+2) get virtualenv through `pip install virtualenv`
+3) create a virtual environment through `virtualenv ../venv`
+4) use that virutal environment through `source ../venv/bin/activate`
+5) pull down the dependencies using `pip install -r requirements.txt`
+6) test your code by running `py.test`
